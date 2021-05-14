@@ -7,19 +7,10 @@
 
 import SwiftUI
 
-class ScrollToModel: ObservableObject {
-    enum Action {
-        case end
-        case top
-    }
-    @Published var direction: Action? = nil
-}
-
 struct ChatTableView : View {
     let currentUser: AuthorModel
     
     @State var composedMessage: String = ""
-    @StateObject var vm = ScrollToModel()
     @EnvironmentObject var chatController: ChatController
     
     var body: some View {
@@ -32,12 +23,8 @@ struct ChatTableView : View {
                                 .frame(maxWidth: .infinity)
                         }
                     }
-                    .onReceive(vm.$direction) { action in
-                        guard !chatController.messages.isEmpty else { return }
-                        withAnimation {
-                            print("Kayay!: \(chatController.messages.endIndex)")
-                            sp.scrollTo(chatController.messages.last!, anchor: .bottom)
-                        }
+                    .onChange(of: chatController.messages.count) { _ in
+                        sp.scrollTo(chatController.messages.last!, anchor: .bottom)
                     }
                 }
             }
@@ -75,7 +62,6 @@ struct ChatTableView : View {
         if composedMessage.isEmpty == false {
             let message = ChatMessageModel(text: composedMessage, isSentByCurrentUser: true, author: currentUser)
             chatController.sendMessage(message)
-            vm.direction = .end
             composedMessage = ""
         }
     }
