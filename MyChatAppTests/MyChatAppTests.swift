@@ -6,28 +6,34 @@
 //
 
 import XCTest
+import SwiftUI
+import SnapshotTesting
 @testable import MyChatApp
 
 class MyChatAppTests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testChatRowSnapshots() throws {
+        
+        var testView: some View {
+            List {
+                ChatRow(chatMessage:  ChatMessageModel(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", isSentByCurrentUser: true, author: AuthorModel(avatar: "A", name: "You", id: "A"))).frame(maxWidth:.infinity)
+                ChatRow(chatMessage: ChatMessageModel(text: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", isSentByCurrentUser: false, author: AuthorModel(avatar: "B", name: "Betty", id: "B")))
+            }.listStyle(SidebarListStyle()).frame(maxWidth:.infinity)
         }
+        assertSnapshot(matching: testView, as: .image)
     }
-
+    
+    func testChatTableViewSnapshots() throws {
+        var testView: some View {
+            ChatTableView(currentUser: AuthorModel(avatar: "A", name: "A", id: "A"))
+                    .environmentObject(ChatController())
+        }
+        assertSnapshot(matching: testView, as: .image)
+    }
 }

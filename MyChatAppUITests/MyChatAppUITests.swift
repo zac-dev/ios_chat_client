@@ -22,21 +22,30 @@ class MyChatAppUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
+    func testScrollOnMessageSubmit() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+        let messageTextField = app.textFields["Message..."]
+        let sendButton = app.buttons["Send"]
+        let messageScrollView = app.scrollViews["chatTable"]
+        messageScrollView.swipeUp()
+        messageScrollView.swipeUp()
+        messageScrollView.swipeUp()
+        
+        
+        messageTextField.tap()
+        messageTextField.typeText("New value 1")
+        sendButton.tap()
+        
+        messageTextField.typeText("New value 2")
+        sendButton.tap()
+        
+        messageTextField.typeText("New value 3")
+        sendButton.tap()
+        
+        // last message should be visible on the screen
+        XCTAssertTrue(app.staticTexts["New value 3"].exists)
+        print(app)
     }
 }
