@@ -8,14 +8,11 @@
 import XCTest
 
 class MyChatAppUITests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
@@ -27,25 +24,24 @@ class MyChatAppUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         let messageTextField = app.textFields["Message..."]
-        let sendButton = app.buttons["Send"]
         let messageScrollView = app.scrollViews["chatTable"]
         messageScrollView.swipeUp()
         messageScrollView.swipeUp()
         messageScrollView.swipeUp()
-        
-        
+
         messageTextField.tap()
         messageTextField.typeText("New value 1")
-        sendButton.tap()
-        
+        app.keyboards.buttons["return"].tap()
+
+        messageTextField.tap() // should break here because textfield should not dismiss on submission of data
         messageTextField.typeText("New value 2")
-        sendButton.tap()
-        
+        app.keyboards.buttons["return"].tap()
+
+        messageTextField.tap()
         messageTextField.typeText("New value 3")
-        sendButton.tap()
-        
+        app.keyboards.buttons["return"].tap()
+
         // last message should be visible on the screen
         XCTAssertTrue(app.staticTexts["New value 3"].exists)
-        print(app)
     }
 }

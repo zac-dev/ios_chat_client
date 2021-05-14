@@ -8,21 +8,34 @@
 import Combine
 import SwiftUI
 
-class ChatController : ObservableObject {
-    
+class ChatController: ObservableObject {
     var didChange = PassthroughSubject<Void, Never>()
-    
+
     // Populate form server call/database later
     @Published var messages = [
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: true, author: AuthorModel(avatar: "A", name: "Anthony", id: "A")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "B", name: "Betty", id: "B")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "C", name: "Charles", id: "C")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "D", name: "Dennis", id: "D")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "E", name: "Enid", id: "E")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "F", name: "Fank", id: "F")),
-        ChatMessageModel(text: "Hello world", isSentByCurrentUser: false, author: AuthorModel(avatar: "G", name: "Gale", id: "G"))
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: true,
+                         author: AuthorModel(avatar: "A", name: "Anthony", identity: "A")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "B", name: "Betty", identity: "B")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "C", name: "Charles", identity: "C")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "D", name: "Dennis", identity: "D")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "E", name: "Enid", identity: "E")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "F", name: "Fank", identity: "F")),
+        ChatMessageModel(text: "Hello world",
+                         isSentByCurrentUser: false,
+                         author: AuthorModel(avatar: "G", name: "Gale", identity: "G"))
     ]
-    
+
     func sendMessage(_ chatMessage: ChatMessageModel) {
         messages.append(chatMessage)
         // send message to server here later

@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct ChatTableView : View {
+struct ChatTableView: View {
     let currentUser: AuthorModel
-    
+
     @State var composedMessage: String = ""
     @EnvironmentObject var chatController: ChatController
-    
+
     var body: some View {
         VStack {
             ScrollView {
-                ScrollViewReader { sp in
+                ScrollViewReader { scrollProxy in
                     LazyVStack {
                         ForEach(chatController.messages, id: \.self) { msg in
                             ChatRow(chatMessage: msg)
@@ -24,7 +24,7 @@ struct ChatTableView : View {
                         }
                     }
                     .onChange(of: chatController.messages.count) { _ in
-                        sp.scrollTo(chatController.messages.last!, anchor: .bottom)
+                        scrollProxy.scrollTo(chatController.messages.last!, anchor: .bottom)
                     }
                 }
             }
@@ -39,23 +39,30 @@ struct ChatTableView : View {
             VStack {
                 Divider()
                 HStack {
-                    TextField("Message...", text: $composedMessage)
+                    TextField("Message...", text: $composedMessage,
+                              onCommit: {
+                                  print("tick")
+                                  sendMessage()
+                                  // self.firstResponder = "TF1"
+                              })
                         .multilineTextAlignment(.leading)
                         .lineLimit(nil)
                         .frame(minHeight: CGFloat(44))
                         .padding(.leading, 15)
-                    
-                    Button(action: sendMessage) {
-                        Text("Send")
-                            .padding(10)
-                            .foregroundColor(.white)
-                            .font(.footnote)
-                    }
-                    .frame(minHeight: CGFloat(44))
-                    .background(Color.green)
-                    .cornerRadius(6)
-                    .padding(.trailing, 16)
-                    
+                        .id("TF1")
+
+                    /*
+                     Button(action: sendMessage) {
+                         Text("Send")
+                             .padding(10)
+                             .foregroundColor(.white)
+                             .font(.footnote)
+                     }
+                     .frame(minHeight: CGFloat(44))
+                     .background(Color.green)
+                     .cornerRadius(6)
+                     .padding(.trailing, 16)
+                     */
                 }
                 .frame(minHeight: CGFloat(64))
                 .padding(.bottom, 6)
@@ -63,7 +70,7 @@ struct ChatTableView : View {
             .accessibility(identifier: "messageEntryControl")
         }
     }
-    
+
     func sendMessage() {
         if composedMessage.isEmpty == false {
             let message = ChatMessageModel(text: composedMessage, isSentByCurrentUser: true, author: currentUser)
@@ -74,10 +81,10 @@ struct ChatTableView : View {
 }
 
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
-    static var previews: some View {
-        ChatTableView(currentUser: AuthorModel(avatar: "A", name: "A", id: "A"))
-            .environmentObject(ChatController())
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ChatTableView(currentUser: AuthorModel(avatar: "A", name: "A", identity: "A"))
+                .environmentObject(ChatController())
+        }
     }
-}
 #endif

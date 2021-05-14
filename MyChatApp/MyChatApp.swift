@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct MyChatApp: App {
-    let controller: ChatController = ChatController()
+    let controller = ChatController()
     var body: some Scene {
         WindowGroup {
-            ChatTableView(currentUser: AuthorModel(avatar: "A", name: "Anthony", id: "A")).environmentObject(controller)
+            ChatTableView(currentUser: AuthorModel(avatar: "A", name: "Anthony", identity: "A"))
+                .environmentObject(controller)
         }
     }
 }

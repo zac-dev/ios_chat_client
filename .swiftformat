@@ -1,0 +1,3 @@
+--disable trailingCommas
+
+--exclude Pods,Generated
