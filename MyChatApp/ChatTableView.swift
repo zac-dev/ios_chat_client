@@ -28,6 +28,12 @@ struct ChatTableView : View {
                     }
                 }
             }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                                to: nil,
+                                                from: nil,
+                                                for: nil)
+            }
             .padding(.bottom, 5)
             .accessibility(identifier: "chatTable")
             VStack {
